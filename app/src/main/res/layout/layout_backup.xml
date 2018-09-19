@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="match_parent">
+    <Button
+        android:onClick="backup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="备份数据"/>
+
+    <Button
+        android:onClick="restore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="获取备份数据"/>
+
+    <TextView
+        android:id="@+id/tv_backup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="备份的数据"/>
+
+    <Button
+        android:onClick="createNewFile"
+        android:text="创建一个prefs文件"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

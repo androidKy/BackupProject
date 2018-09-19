@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">全息备份大师</string>
+    <string name="action_settings">设置</string>
+
+    <!--Replace with your own interstitial ad unit id. -->
+    <string name="interstitial_ad_unit_id">ca-app-pub-9334331314250740/1106116712</string>
+
+    <!-- This is an ad unit ID for a test ad. Replace with your own banner ad unit id. -->
+    <string name="banner_ad_unit_id">ca-app-pub-9334331314250740/8629383518</string>
+
+    <string name="tab_title_backup">一键备份</string>
+    <string name="tab_title_restore">一键还原</string>
+
+    <string name="hint_backup_search">查找待备份数据...</string>
+    <string name="hint_restore_search">查找可还原数据...</string>
+
+    <string name="about_text">猎豹备份大师山寨版</string>
+
+    <string name="dialog_title_permission">Permission Request</string>
+    <string name="dialog_content_permission">
+        For this app to work, you need to grant the required permissions.
+        \nDo you want to go to permission settings and grant permissions?
+    </string>
+
+</resources>

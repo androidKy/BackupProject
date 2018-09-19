@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BackupProject.iml" filepath="$PROJECT_DIR$/BackupProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backupapp/backupapp.iml" filepath="$PROJECT_DIR$/backupapp/backupapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backupjar/backupjar.iml" filepath="$PROJECT_DIR$/backupjar/backupjar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taiSource/taiSource.iml" filepath="$PROJECT_DIR$/taiSource/taiSource.iml" />
+    </modules>
+  </component>
+</project>
