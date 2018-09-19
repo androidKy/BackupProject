@@ -15,10 +15,10 @@ Android备份工具：（设备必须是已root)
           .setContext(context)
           .setUid("uid")  //used for generate a path of server
           .setAid("aid")  //used for generate a path of server
-          .restore("com.batmobi.backup", new IResponListener() {
+          .backup("packageName", new IResponListener() {
               @Override
               public void onResponSuccess() {
-                 Log.i(TAG, "恢复备份成功 onResponSuccess: ");
+                 Log.i(TAG, "备份成功 onResponSuccess: ");
               }
 
              @Override
@@ -34,7 +34,7 @@ Android备份工具：（设备必须是已root)
           .setContext(context)
           .setUid("uid")  //used for generate a path of server
           .setAid("aid")  //used for generate a path of server
-          .restore("com.batmobi.backup", new IResponListener() {
+          .restore("packageName", new IResponListener() {
                @Override
                public void onResponSuccess() {
                    Log.i(TAG, "恢复备份成功 onResponSuccess: ");
