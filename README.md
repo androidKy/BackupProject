@@ -12,19 +12,17 @@ Android备份工具：（设备必须是已root)
 
       new BackupManage()
           .init()
-          .setContext(this)
+          .setContext(context)
           .setUid("uid")  //used for generate a path of server
           .setAid("aid")  //used for generate a path of server
           .restore("com.batmobi.backup", new IResponListener() {
               @Override
               public void onResponSuccess() {
-                 toast("恢复备份成功");
                  Log.i(TAG, "恢复备份成功 onResponSuccess: ");
               }
 
              @Override
              public void onResponFailed(String msg) {
-                  toast("恢复备份失败 msg = " + msg);
                  Log.i(TAG, "onResponFailed: " + msg);
               }
           });
@@ -33,19 +31,17 @@ Android备份工具：（设备必须是已root)
 
        new BackupManage()
           .init()
-          .setContext(this)
+          .setContext(context)
           .setUid("uid")  //used for generate a path of server
           .setAid("aid")  //used for generate a path of server
           .restore("com.batmobi.backup", new IResponListener() {
                @Override
                public void onResponSuccess() {
-                   toast("恢复备份成功");
                    Log.i(TAG, "恢复备份成功 onResponSuccess: ");
                }
 
                @Override
                public void onResponFailed(String msg) {
-                    toast("恢复备份失败 msg = " + msg);
-                     Log.i(TAG, "onResponFailed: " + msg);
+                   Log.i(TAG, "onResponFailed: " + msg);
                }
            });
