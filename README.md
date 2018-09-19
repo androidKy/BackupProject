@@ -44,3 +44,5 @@
                    Log.i(TAG, "onResponFailed: " + msg);
                }
            });
+
+*注：本项目是参考钛备份而写的，项目中taisource就是钛备份源码，backupJar是本人写的*
