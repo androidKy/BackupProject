@@ -41,6 +41,13 @@ public class BackupManage implements IManager {
     }
 
     @Override
+    public IManager setParams(String ftpIp, String uid, String aid, String fileName) {
+        if (mBackupManageImpl != null)
+            mBackupManageImpl.setParams(ftpIp, uid, aid, fileName);
+        return this;
+    }
+
+   /* @Override
     public IManager setUid(String uid) {
         if (mBackupManageImpl != null)
             mBackupManageImpl.setUid(uid);
@@ -52,7 +59,7 @@ public class BackupManage implements IManager {
         if (mBackupManageImpl != null)
             mBackupManageImpl.setAid(aid);
         return this;
-    }
+    }*/
 
     @Override
     public void backup(String packageName) {

@@ -9,12 +9,14 @@ package com.batmobi.zip;
 public interface IZip {
     void startZip(String filePath);
 
+    void setFileNameParams(String uid, String aid);
+
     boolean isZipping();
 
     void addZipListener(IZipListener zipListener);
 
     interface IZipListener {
-        void onZipSuccess();
+        void onZipSuccess(String zipFileName);
 
         void onZipFailed(String failedMsg);
     }

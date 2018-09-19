@@ -8,7 +8,7 @@ package com.batmobi;
 
 public interface IResponListener {
 
-    void onResponSuccess();
+    void onResponSuccess(String zipFileName);
 
     void onResponFailed(String msg);
 }

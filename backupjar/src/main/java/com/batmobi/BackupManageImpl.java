@@ -33,7 +33,12 @@ public class BackupManageImpl implements IManager {
     private IBackup mBackupObj = null;
     private IResponListener mResponListener;
     private List<String> mPackageNameList;
-    private boolean mIsOperating = false;
+    private boolean mIsOperating = false;   //是否正在备份或者还原
+
+    private String mFtpIp = "";
+    private String mUid = "";
+    private String mAid = "";
+    private String mZipFileName = "";   //备份文件名
 
     private static volatile BackupManageImpl mInstance;
 
@@ -72,16 +77,27 @@ public class BackupManageImpl implements IManager {
     }
 
     @Override
-    public BackupManageImpl setUid(String uid) {
-        BackupConstant.UID = uid;
+    public BackupManageImpl setParams(String ftpIp, String uid, String aid, String fileName) {
+        this.mFtpIp = ftpIp;
+        this.mUid = uid;
+        this.mAid = aid;
+        this.mZipFileName = fileName;
+        return this;
+    }
+
+
+/*
+    @Override
+    public BackupManageImpl setUid(String mUid) {
+        BackupConstant.UID = mUid;
         return this;
     }
 
     @Override
-    public BackupManageImpl setAid(String aid) {
-        BackupConstant.AID = aid;
+    public BackupManageImpl setAid(String mAid) {
+        BackupConstant.AID = mAid;
         return this;
-    }
+    }*/
 
 
     @Override
@@ -193,7 +209,7 @@ public class BackupManageImpl implements IManager {
         }
         mBackupObj.startBackup(packageNameList, mDestDir, new IResponListener() {
             @Override
-            public void onResponSuccess() {
+            public void onResponSuccess(String msg) {
                 LogUtil.out(TAG, "备份APP数据成功");
                 zipFile();
             }
@@ -211,10 +227,12 @@ public class BackupManageImpl implements IManager {
      */
     private void zipFile() {
         IZip zip = SimpleFactory.createZiper(mContext);
+        zip.setFileNameParams(mUid, mAid);
         zip.addZipListener(new IZip.IZipListener() {
             @Override
-            public void onZipSuccess() {
-                LogUtil.out(TAG, "压缩sdcard数据成功");
+            public void onZipSuccess(String zipFileName) {
+                LogUtil.out(TAG, "压缩sdcard数据成功 文件名：" + zipFileName);
+                mZipFileName = zipFileName;
                 uploadFile();
             }
 
@@ -232,7 +250,9 @@ public class BackupManageImpl implements IManager {
      */
     private void uploadFile() {
         IUpload upload = SimpleFactory.createUploader();
-        upload.upload(mContext, new IUpload.IUploadListener() {
+        upload.setParams(mFtpIp, mUid, mAid, mZipFileName);
+        upload.setContext(mContext);
+        upload.upload(new IUpload.IUploadListener() {
             @Override
             public void onUploadSuccess() {
                 ZipUtils.deleteFile(new File(BackupConstant.ZIP_FILE_PATH));
@@ -252,6 +272,7 @@ public class BackupManageImpl implements IManager {
      */
     private void download() {
         IDownload download = SimpleFactory.createDownloader();
+        download.setParams(mFtpIp, mUid, mAid, mZipFileName);
         download.addListener(new IDownload.IDownloadListener() {
             @Override
             public void onDownloadProcess(String msg, int progress) {
@@ -260,8 +281,9 @@ public class BackupManageImpl implements IManager {
 
             @Override
             public void onDownloadSuccess(String fileName) {
-                LogUtil.out(TAG, "onDownloadSuccess localFilePath : " + fileName);
-                unZip(fileName);
+                mZipFileName = fileName;
+                LogUtil.out(TAG, "onDownloadSuccess fileName : " + fileName);
+                unZip();
             }
 
             @Override
@@ -276,15 +298,19 @@ public class BackupManageImpl implements IManager {
     /**
      * 解压
      */
-    private void unZip(String fileName) {
-        File file = new File(BackupConstant.DOWNLOAD_FILE_PATH + fileName);
+    private void unZip() {
+        LogUtil.out(TAG, "开始解压》》》》》》");
+        File file = new File(BackupConstant.DOWNLOAD_FILE_PATH + mZipFileName);
         if (file.exists()) {
             //删除sdcard上的原有数据，但不删除压缩包
-            deleteFile(new File(BackupConstant.SDCARD_PATH), fileName);
+            deleteFile(new File(BackupConstant.SDCARD_PATH), mZipFileName);
             //解压到sdcard上
+            String zipFilePath = file.getAbsolutePath();
+
+            LogUtil.out(TAG, "zipFilePath : " + zipFilePath);
             ZipUtils.unZip(file.getAbsolutePath(), BackupConstant.DOWNLOAD_FILE_PATH);
             //移动到sdcard目录下
-            removeData2sdcard(fileName);
+            removeData2sdcard();
         } else {
             onFailed("找不到解压的备份压缩包");
         }
@@ -293,12 +319,12 @@ public class BackupManageImpl implements IManager {
     /**
      * 移动数据到sdcard目录下
      */
-    private void removeData2sdcard(final String fileName) {
+    private void removeData2sdcard() {
         String command = "cp -ar " + "/sdcard/sdcard/*" + " " + BackupConstant.SDCARD_PATH;
         CommandUtil.sendCommand(command, new CommandUtil.OnResponListener() {
             @Override
             public void onSuccess(List<String> responList) {
-                deleteZipPackage(fileName);
+                deleteZipPackage(mZipFileName);
                 recoverAppData();
             }
 
@@ -337,7 +363,7 @@ public class BackupManageImpl implements IManager {
         IRestore restore = SimpleFactory.createRestoreObj(BackupConstant.TAI_BACKUP);
         restore.restore(mPackageNameList, mDestDir, new IResponListener() {
             @Override
-            public void onResponSuccess() {
+            public void onResponSuccess(String msg) {
                 onSucceed();
             }
 
@@ -388,7 +414,7 @@ public class BackupManageImpl implements IManager {
             @Override
             public void run() {
                 if (mResponListener != null)
-                    mResponListener.onResponSuccess();
+                    mResponListener.onResponSuccess(mZipFileName);
             }
         });
     }

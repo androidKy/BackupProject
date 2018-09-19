@@ -7,6 +7,7 @@ package com.batmobi.download;
  */
 
 public interface IDownload {
+    void setParams(String ftpIp, String uid, String aid, String fileName);
 
     void addListener(IDownloadListener downloadListener);
 

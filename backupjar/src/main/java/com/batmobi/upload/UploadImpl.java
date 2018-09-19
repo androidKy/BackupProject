@@ -27,6 +27,10 @@ public class UploadImpl implements IUpload {
     private WeakReference<Context> mContextWeakReference;
     private IUploadListener mUploadListener;
     private boolean mIsUploading;
+    private String mFtpIp;
+    private String mUid;
+    private String mAid;
+    private String mFileName;
 
     private UploadImpl() {
 
@@ -42,9 +46,22 @@ public class UploadImpl implements IUpload {
         return mInstance;
     }
 
+
     @Override
-    public void upload(Context context, IUploadListener uploadListener) {
+    public void setParams(String ftpIp, String uid, String aid, String fileName) {
+        this.mFtpIp = ftpIp;
+        this.mUid = uid;
+        this.mAid = aid;
+        this.mFileName = fileName;
+    }
+
+    @Override
+    public void setContext(Context context) {
         mContextWeakReference = new WeakReference<>(context);
+    }
+
+    @Override
+    public void upload(IUploadListener uploadListener) {
         mUploadListener = uploadListener;
 
         ThreadUtil.async(new Runnable() {
@@ -70,11 +87,11 @@ public class UploadImpl implements IUpload {
                 LogUtil.out(TAG, "上传的文件路径：" + uploadFile.getPath());
 
                 FTPManager ftpManager = new FTPManager();
-                if (ftpManager.connect(BackupConstant.FTP_ADDRESS, "Anonymous", "")) {
+                if (ftpManager.connect(mFtpIp, "Anonymous", "")) {
                     LogUtil.out(TAG, "ftp连接成功》》》》》》");
                     String aid = file.getName().split("___")[0];
                     String serverPath = String.format("%s%s/%s/", BackupConstant.FTP_BACKUP_PATH,
-                            BackupConstant.UID, BackupConstant.AID);
+                            mUid, mAid);
                     // serverPath = BackupConstant.FTP_BACKUP_PATH;
                     ftpManager.uploadFile(uploadFile.getPath(), serverPath,
                             new FTPManager.IProgressListener() {

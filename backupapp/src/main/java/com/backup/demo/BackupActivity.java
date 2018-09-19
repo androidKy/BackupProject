@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.batmobi.BackupConstant;
 import com.batmobi.BackupManage;
 import com.batmobi.BackupManageImpl;
 import com.batmobi.IManager;
 import com.batmobi.IResponListener;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +38,13 @@ public class BackupActivity extends AppCompatActivity {
         if (backupManage == null)
             backupManage = new BackupManage()
                     .init()
-                    .setContext(this)
-                    .setUid("uid")
-                    .setAid("aid");
+                    .setParams(BackupConstant.FTP_ADDRESS, BackupConstant.UID, BackupConstant.AID, "")
+                    .setContext(this);
         backupManage.backup(packageNameList, new IResponListener() {
             @Override
-            public void onResponSuccess() {
+            public void onResponSuccess(String zipFileName) {
                 toast("备份成功");
-                Log.i(TAG, "备份成功 onResponSuccess: ");
+                Log.i(TAG, "备份成功 onResponSuccess: zipFileName = " + zipFileName);
             }
 
             @Override
@@ -57,14 +58,13 @@ public class BackupActivity extends AppCompatActivity {
     public void restoreSamples(View view) {
         new BackupManage()
                 .init()
+                .setParams(BackupConstant.FTP_ADDRESS, BackupConstant.UID, BackupConstant.AID, "uid_aid_20180919094041.zip")
                 .setContext(this)
-                .setUid("uid")
-                .setAid("aid")
                 .restore("com.batmobi.backup", new IResponListener() {
                     @Override
-                    public void onResponSuccess() {
+                    public void onResponSuccess(String zipFileName) {
                         toast("恢复备份成功");
-                        Log.i(TAG, "恢复备份成功 onResponSuccess: ");
+                        Log.i(TAG, "恢复备份成功 onResponSuccess: zipFileName = " + zipFileName);
                     }
 
                     @Override

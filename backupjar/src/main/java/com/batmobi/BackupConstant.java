@@ -18,11 +18,11 @@ public class BackupConstant {
     public static final int BACKUP_TIMEOUT = 15000; //备份超时的时间
     //压缩包存放的上级路径
     public static final String ZIP_DIR_NAME = "zipFile";
-
-    public static String AID = ZIP_DIR_NAME;
-    public static String UID = ZIP_DIR_NAME;
+/*
+    public static String AID = "aid";
+    public static String UID = "uid";
     //FTP的ip地址
-    public static final String FTP_ADDRESS = "192.168.31.244";
+    public static final String FTP_ADDRESS = "192.168.31.244";*/
     //FTP的文件夹
     public static final String FTP_BACKUP_PATH = "/RomBackUp/";
 

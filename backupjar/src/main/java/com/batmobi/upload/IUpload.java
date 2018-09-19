@@ -9,7 +9,11 @@ import android.content.Context;
  */
 
 public interface IUpload {
-    void upload(Context context, IUploadListener uploadListener);
+    void setParams(String ftpIp, String uid, String aid, String fileName);
+
+    void setContext(Context context);
+
+    void upload(IUploadListener uploadListener);
 
     interface IUploadListener {
         void onUploadSuccess();

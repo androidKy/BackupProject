@@ -180,7 +180,7 @@ public class BackupForShell implements IBackup {
     private void backupSucceed() {
         mBackupCounted = 0;
         mRemovedCount = 0;
-        getResponListener().onResponSuccess();
+        getResponListener().onResponSuccess("");
     }
 
     private IResponListener getResponListener() {
@@ -189,35 +189,12 @@ public class BackupForShell implements IBackup {
         return mOnResponListener;
     }
 
-    /**
-     * 检查root权限
-     *
-     * @return
-     */
-    private boolean checkRootPermission() {
-        boolean isRootAccessGiven = false;
-
-        try {
-            if (RootTools.isAccessGiven()) {
-                //isPhoneConfigSupported = false;
-                isRootAccessGiven = true;
-
-            }
-            // TODO: 2018/9/12  去申请权限
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            isRootAccessGiven = false;
-        }
-
-        return isRootAccessGiven;
-    }
 
 
     private class EmptyResponListener implements IResponListener {
 
         @Override
-        public void onResponSuccess() {
+        public void onResponSuccess(String msg) {
 
         }
 

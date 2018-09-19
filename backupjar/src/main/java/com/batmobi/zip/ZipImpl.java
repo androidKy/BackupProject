@@ -24,8 +24,11 @@ public class ZipImpl implements IZip {
 
     private static volatile ZipImpl mInstance;
     private WeakReference<Context> mContextWeakReference;
-    private boolean mIsZipping;
     private IZipListener mZipListener;
+    private boolean mIsZipping;
+
+    private String uid;
+    private String aid;
 
     private ZipImpl(Context context) {
         mContextWeakReference = new WeakReference<Context>(context);
@@ -62,6 +65,12 @@ public class ZipImpl implements IZip {
         }
     }
 
+    @Override
+    public void setFileNameParams(String uid, String aid) {
+        this.uid = uid;
+        this.aid = aid;
+    }
+
     /**
      * 备份sdcard数据
      *
@@ -84,15 +93,15 @@ public class ZipImpl implements IZip {
             return;
         }
         LogUtil.out(TAG, "压缩文件成功》》》》》");
-        onSucceed();
+        onSucceed(zipFile.getName());
     }
 
     private File zipFile(File sdcardFileList) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
-        String tempFileName = String.format("%s%s___%s.%s", BackupConstant.ZIP_FILE_PATH, getAndroidId(),
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String tempFileName = String.format("%s%s_%s_%s.%s", BackupConstant.ZIP_FILE_PATH,uid,aid,
                 dateFormat.format(new Date()), "zip.tmp");
 
-        tempFileName = BackupConstant.ZIP_FILE_PATH + BackupConstant.ZIP_DIR_NAME + ".zip.tmp";
+       // tempFileName = BackupConstant.ZIP_FILE_PATH + "uid_aid_20181234567890" + ".zip.tmp";
         LogUtil.out(TAG, "zipFile 新文件名字：" + tempFileName);
         try {
             ZipUtils.zip(sdcardFileList, tempFileName);
@@ -133,8 +142,8 @@ public class ZipImpl implements IZip {
             mZipListener.onZipFailed(message);
     }
 
-    private void onSucceed() {
+    private void onSucceed(String zipFileName) {
         if (mZipListener != null)
-            mZipListener.onZipSuccess();
+            mZipListener.onZipSuccess(zipFileName);
     }
 }

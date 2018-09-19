@@ -32,12 +32,22 @@ public interface IManager {
     IManager setBackupDestDir(String destDir);
 
     /**
+     * 传的顺序是：ftpIp,uid,aid,fileName
+     * 注：备份时只传uid,aid,ftpIP。还原时四个参数都传，都不能为空。
+     * @param ftpIp
+     * @param uid
+     * @param aid
+     * @param fileName
+     * @return
+     */
+    IManager setParams(String ftpIp,String uid,String aid,String fileName);
+    /**
      * 设置uid
      *
      * @param uid
      * @return
      */
-    IManager setUid(String uid);
+  //  IManager setUid(String uid);
 
     /**
      * 设置aid
@@ -45,7 +55,7 @@ public interface IManager {
      * @param aid
      * @return
      */
-    IManager setAid(String aid);
+   // IManager setAid(String aid);
 
     /**
      * 传入需要备份的包名
@@ -57,6 +67,7 @@ public interface IManager {
     void backup(String packageName, IResponListener responListener);
 
     void backup(List<String> packageNameList, IResponListener responListener);
+
     /**
      * 清楚备份
      *
@@ -67,6 +78,7 @@ public interface IManager {
     void removeBackup(String packageName, IResponListener responListener);
 
     void removeBackup(List<String> packageNameList, IResponListener responListener);
+
     /**
      * 还原备份
      *

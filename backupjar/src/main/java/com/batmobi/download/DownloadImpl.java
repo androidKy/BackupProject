@@ -7,6 +7,8 @@ import com.batmobi.util.FTPManager;
 import com.batmobi.util.ThreadUtil;
 import com.batmobi.util.ZipUtils;
 
+import org.apache.commons.net.ftp.FTPFile;
+
 import java.io.File;
 
 /**
@@ -18,12 +20,22 @@ import java.io.File;
 public class DownloadImpl implements IDownload {
     private static final String TAG = "DownloadImpl";
 
-    private static final int DOWNLOAD_TIME_OUT = 5 * 60 * 1000; //下载超时时间默认5分钟
-    private int mStartTime = 0;
-
     private IDownloadListener mDownloadListener;
     private String mDownloadPath;
-    private String mNewFileName;
+    //private String mNewFileName;
+
+    private String mFtpIp;
+    private String mUid;
+    private String mAid;
+    private String mFileName;
+
+    @Override
+    public void setParams(String ftpIp, String uid, String aid, String fileName) {
+        this.mFtpIp = ftpIp;
+        this.mUid = uid;
+        this.mAid = aid;
+        this.mFileName = fileName;
+    }
 
     @Override
     public void addListener(IDownloadListener downloadListener) {
@@ -35,7 +47,7 @@ public class DownloadImpl implements IDownload {
         //初始化存放下载下来的zip包的存放路径
         init();
         mDownloadPath = String.format("%s%s/%s/", BackupConstant.FTP_BACKUP_PATH,
-                BackupConstant.UID, BackupConstant.AID);
+                mUid, mAid);
         ThreadUtil.async(new DownloadTask());
     }
 
@@ -48,15 +60,28 @@ public class DownloadImpl implements IDownload {
             try {
                 ftpManager = new FTPManager();
 
-                if (ftpManager.connect(BackupConstant.FTP_ADDRESS, "Anonymous", "")) {
-                    //查询服务器此路径下最新的文件
-                    mNewFileName = ftpManager.getNewestFileName(mDownloadPath);
-                    if (TextUtils.isEmpty(mNewFileName)) {
+                if (ftpManager.connect(mFtpIp, "Anonymous", "")) {
+                    //查询服务器此路径下是否存在查询的文件
+                    // mNewFileName = ftpManager.getNewestFileName(mDownloadPath);
+                    boolean isFileExisting = false;
+                    FTPFile[] ftpFiles = ftpManager.listFiles(mDownloadPath);
+                    if (ftpFiles != null && ftpFiles.length > 0) {
+                        for (FTPFile file : ftpFiles) {
+                            if (file.getName().equals(mFileName)) {
+                                isFileExisting = true;
+                            }
+                        }
+                    } else {
+                        isFileExisting = false;
+                    }
+
+                    if (!isFileExisting) {
                         onFailed("此uid/aid下没有可用文件");
                         return;
                     }
+
                     //开始下载
-                    ftpManager.downloadFile(BackupConstant.DOWNLOAD_FILE_PATH, mDownloadPath + "/" + mNewFileName, new FTPManager.IProgressListener() {
+                    ftpManager.downloadFile(BackupConstant.DOWNLOAD_FILE_PATH, mDownloadPath + mFileName, new FTPManager.IProgressListener() {
                         @Override
                         public void onProgress(String msg, int progress) {
                             DownloadImpl.this.onProgress(msg, progress);
@@ -64,7 +89,7 @@ public class DownloadImpl implements IDownload {
 
                         @Override
                         public void onSuccess(String filePath, int ts) {
-                            onSucceed(mNewFileName);
+                            onSucceed(mFileName);
                         }
 
                         @Override

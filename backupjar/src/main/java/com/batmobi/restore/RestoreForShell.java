@@ -196,7 +196,7 @@ public class RestoreForShell implements IRestore {
     }
 
     private void restoreSucceed() {
-        getResponListener().onResponSuccess();
+        getResponListener().onResponSuccess("");
 
     }
 
@@ -215,7 +215,7 @@ public class RestoreForShell implements IRestore {
     private class EmptyResponListener implements IResponListener {
 
         @Override
-        public void onResponSuccess() {
+        public void onResponSuccess(String msg) {
 
         }
 

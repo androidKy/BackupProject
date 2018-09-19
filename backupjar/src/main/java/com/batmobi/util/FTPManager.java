@@ -145,7 +145,7 @@ public class FTPManager {
         // 如果本地文件存在，服务器文件也在，上传文件，这个方法中也包括了断点上传
         long localSize = localFile.length(); // 本地文件的长度
         ftpClient.enterLocalPassiveMode();
-        FTPFile[] files = ftpClient.listFiles();
+        FTPFile[] files = ftpClient.listFiles(fileName);
         long serverSize = 0;
         if (files.length == 0) {
             LogUtil.out(TAG, "服务器文件不存在");
@@ -339,7 +339,7 @@ public class FTPManager {
         return name;
     }
 
-    private FTPFile[] listFiles(String directorName) {
+    public FTPFile[] listFiles(String directorName) {
         FTPFile[] ftpFiles = null;
         try {
             LogUtil.out(TAG, "listFiles:" + directorName);
