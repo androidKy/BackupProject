@@ -35,12 +35,12 @@ public class BackupActivity extends AppCompatActivity {
     public void backupSamples(View view) {
         List<String> packageNameList = new ArrayList<>();
         packageNameList.add("com.batmobi.backup");
-        if (backupManage == null)
-            backupManage = new BackupManage()
-                    .init()
-                    .setParams(BackupConstant.FTP_ADDRESS, BackupConstant.UID, BackupConstant.AID, "")
-                    .setContext(this);
-        backupManage.backup(packageNameList, new IResponListener() {
+
+        backupManage = new BackupManage()
+                .init()
+                .setParams("192.168.31.244", "uid", "aid", "")
+                .setContext(this)
+                .backup(packageNameList, new IResponListener() {
             @Override
             public void onResponSuccess(String zipFileName) {
                 toast("备份成功");
@@ -53,12 +53,14 @@ public class BackupActivity extends AppCompatActivity {
                 Log.i(TAG, "onResponFailed: " + msg);
             }
         });
+
+        backupManage.uploadFile();
     }
 
     public void restoreSamples(View view) {
         new BackupManage()
                 .init()
-                .setParams(BackupConstant.FTP_ADDRESS, BackupConstant.UID, BackupConstant.AID, "uid_aid_20180919094041.zip")
+                .setParams("192.168.31.244", "uid", "aid", "uid_aid_20180919095916.zip")
                 .setContext(this)
                 .restore("com.batmobi.backup", new IResponListener() {
                     @Override

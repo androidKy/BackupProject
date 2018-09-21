@@ -2,6 +2,7 @@ package com.batmobi;
 
 import android.content.Context;
 
+
 import com.batmobi.backup.IBackup;
 import com.batmobi.download.IDownload;
 import com.batmobi.restore.IRestore;
@@ -101,37 +102,43 @@ public class BackupManageImpl implements IManager {
 
 
     @Override
-    public void backup(String packageName) {
+    public BackupManageImpl backup(String packageName) {
         backup(packageName, null);
+
+        return this;
     }
 
     //备份完app数据到sdcard后
     //再压缩sdcard到zipFile目录下
     //然后上传到FTP,清楚备份的数据
     @Override
-    public void backup(String packageName, IResponListener responListener) {
+    public BackupManageImpl backup(String packageName, IResponListener responListener) {
         List<String> packageNameList = new LinkedList<>();
         packageNameList.add(packageName);
 
         backup(packageNameList, responListener);
+
+        return this;
     }
 
     @Override
-    public void backup(List<String> packageNameList, IResponListener responListener) {
+    public BackupManageImpl backup(List<String> packageNameList, IResponListener responListener) {
         mResponListener = responListener;
         if (mContext == null) {
             //mResponListener.onResponFailed("未设置context");
             onFailed("未设置context");
-            return;
+            return this;
         }
         LogUtil.out(TAG, "mIsOperating = " + mIsOperating);
         if (mIsOperating) {
             onFailed("正在备份...请等待完成再进行操作");
-            return;
+            return this;
         }
         mIsOperating = true;
 
         backAppData(packageNameList);
+
+        return this;
     }
 
     /**
@@ -233,7 +240,8 @@ public class BackupManageImpl implements IManager {
             public void onZipSuccess(String zipFileName) {
                 LogUtil.out(TAG, "压缩sdcard数据成功 文件名：" + zipFileName);
                 mZipFileName = zipFileName;
-                uploadFile();
+                //uploadFile();
+                onSucceed();
             }
 
             @Override
@@ -248,7 +256,8 @@ public class BackupManageImpl implements IManager {
     /**
      * 上传
      */
-    private void uploadFile() {
+    @Override
+    public void uploadFile(final IResponListener responListener) {
         IUpload upload = SimpleFactory.createUploader();
         upload.setParams(mFtpIp, mUid, mAid, mZipFileName);
         upload.setContext(mContext);
@@ -256,12 +265,17 @@ public class BackupManageImpl implements IManager {
             @Override
             public void onUploadSuccess() {
                 ZipUtils.deleteFile(new File(BackupConstant.ZIP_FILE_PATH));
-                onSucceed();
+                if (responListener != null) {
+                    responListener.onResponSuccess(mZipFileName);
+                }
             }
 
             @Override
             public void onUploadFailed(String msg) {
-                onFailed("onUploadFailed : " + msg);
+                //onFailed("onUploadFailed : " + msg);
+                if (responListener != null) {
+                    responListener.onResponFailed("上传失败：" + msg);
+                }
             }
         });
     }

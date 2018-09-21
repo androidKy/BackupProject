@@ -47,6 +47,12 @@ public class BackupManage implements IManager {
         return this;
     }
 
+    @Override
+    public void uploadFile(IResponListener responListener) {
+        if (mBackupManageImpl != null)
+            mBackupManageImpl.uploadFile(responListener);
+    }
+
    /* @Override
     public IManager setUid(String uid) {
         if (mBackupManageImpl != null)
@@ -62,21 +68,27 @@ public class BackupManage implements IManager {
     }*/
 
     @Override
-    public void backup(String packageName) {
+    public IManager backup(String packageName) {
         if (mBackupManageImpl != null)
             mBackupManageImpl.backup(packageName);
+
+        return this;
     }
 
     @Override
-    public void backup(String packageName, IResponListener responListener) {
+    public IManager backup(String packageName, IResponListener responListener) {
         if (mBackupManageImpl != null)
             mBackupManageImpl.backup(packageName, responListener);
+
+        return this;
     }
 
     @Override
-    public void backup(List<String> packageNameList, IResponListener responListener) {
+    public IManager backup(List<String> packageNameList, IResponListener responListener) {
         if (mBackupManageImpl != null)
             mBackupManageImpl.backup(packageNameList, responListener);
+
+        return this;
     }
 
     @Override

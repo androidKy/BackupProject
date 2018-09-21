@@ -34,39 +34,32 @@ public interface IManager {
     /**
      * 传的顺序是：ftpIp,uid,aid,fileName
      * 注：备份时只传uid,aid,ftpIP。还原时四个参数都传，都不能为空。
+     *
      * @param ftpIp
      * @param uid
      * @param aid
      * @param fileName
      * @return
      */
-    IManager setParams(String ftpIp,String uid,String aid,String fileName);
-    /**
-     * 设置uid
-     *
-     * @param uid
-     * @return
-     */
-  //  IManager setUid(String uid);
+    IManager setParams(String ftpIp, String uid, String aid, String fileName);
 
     /**
-     * 设置aid
+     * 上传备份并删除本地备份
      *
-     * @param aid
      * @return
      */
-   // IManager setAid(String aid);
+    void uploadFile(IResponListener responListener);
 
     /**
      * 传入需要备份的包名
      *
      * @param packageName
      */
-    void backup(String packageName);
+    IManager backup(String packageName);
 
-    void backup(String packageName, IResponListener responListener);
+    IManager backup(String packageName, IResponListener responListener);
 
-    void backup(List<String> packageNameList, IResponListener responListener);
+    IManager backup(List<String> packageNameList, IResponListener responListener);
 
     /**
      * 清楚备份
