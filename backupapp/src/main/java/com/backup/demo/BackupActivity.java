@@ -41,20 +41,30 @@ public class BackupActivity extends AppCompatActivity {
                 .setParams("192.168.31.244", "uid", "aid", "")
                 .setContext(this)
                 .backup(packageNameList, new IResponListener() {
+                    @Override
+                    public void onResponSuccess(String zipFileName) {
+                        toast("备份成功");
+                        Log.i(TAG, "备份成功 onResponSuccess: zipFileName = " + zipFileName);
+                    }
+
+                    @Override
+                    public void onResponFailed(String msg) {
+                        toast("备份失败 msg = " + msg);
+                        Log.i(TAG, "onResponFailed: " + msg);
+                    }
+                });
+
+        backupManage.uploadFile(new IResponListener() {
             @Override
             public void onResponSuccess(String zipFileName) {
-                toast("备份成功");
-                Log.i(TAG, "备份成功 onResponSuccess: zipFileName = " + zipFileName);
+
             }
 
             @Override
             public void onResponFailed(String msg) {
-                toast("备份失败 msg = " + msg);
-                Log.i(TAG, "onResponFailed: " + msg);
+
             }
         });
-
-        backupManage.uploadFile();
     }
 
     public void restoreSamples(View view) {

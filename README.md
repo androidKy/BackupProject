@@ -12,8 +12,7 @@
       new BackupManage()
           .init()
           .setContext(context)
-          .setUid("uid")  //used for generate a path of server
-          .setAid("aid")  //used for generate a path of server
+          .setParams("192.168.31.244", "uid", "aid", "fileName")
           .backup("packageName", new IResponListener() {
               @Override
               public void onResponSuccess() {
@@ -24,15 +23,25 @@
              public void onResponFailed(String msg) {
                  Log.i(TAG, "onResponFailed: " + msg);
               }
-          });
+          })
+          .uploadFile(new IResponListener(){
+              @Override
+              public void onResponSuccess(){
+              
+              }
+              @Override
+              public void onResponFailed(String msg){
+                
+              }
+          };
+          
 
 * 还原   
 
        new BackupManage()
           .init()
           .setContext(context)
-          .setUid("uid")  //used for generate a path of server
-          .setAid("aid")  //used for generate a path of server
+          .setParams("192.168.31.244", "uid", "aid", "fileName")
           .restore("packageName", new IResponListener() {
                @Override
                public void onResponSuccess() {
