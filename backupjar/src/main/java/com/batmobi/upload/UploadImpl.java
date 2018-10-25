@@ -1,16 +1,14 @@
 package com.batmobi.upload;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.provider.Settings;
+
 
 import com.batmobi.BackupConstant;
 import com.batmobi.util.FTPManager;
 import com.batmobi.util.LogUtil;
 import com.batmobi.util.ThreadUtil;
-import com.batmobi.util.ZipUtils;
 
-import java.io.Console;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
@@ -72,6 +70,7 @@ public class UploadImpl implements IUpload {
                 } catch (Exception e) {
                     e.printStackTrace();
                     LogUtil.error(TAG, e.getMessage());
+                    onFailed(e.getMessage());
                 }
             }
         });
@@ -87,7 +86,8 @@ public class UploadImpl implements IUpload {
                 LogUtil.out(TAG, "上传的文件路径：" + uploadFile.getPath());
 
                 FTPManager ftpManager = new FTPManager();
-                if (ftpManager.connect(mFtpIp, "Anonymous", "")) {
+                boolean isConnected = ftpManager.connect(mFtpIp, "Anonymous", "");
+                if (isConnected) {
                     LogUtil.out(TAG, "ftp连接成功》》》》》》");
                     String aid = file.getName().split("___")[0];
                     String serverPath = String.format("%s%s/%s/", BackupConstant.FTP_BACKUP_PATH,

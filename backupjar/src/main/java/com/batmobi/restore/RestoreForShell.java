@@ -2,12 +2,12 @@ package com.batmobi.restore;
 
 import android.text.TextUtils;
 
+
 import com.batmobi.BackupConstant;
 import com.batmobi.IResponListener;
 import com.batmobi.util.CommandUtil;
 import com.batmobi.util.LogUtil;
 import com.batmobi.util.ThreadUtil;
-import com.stericson.RootTools.RootTools;
 
 import java.io.File;
 import java.util.LinkedList;

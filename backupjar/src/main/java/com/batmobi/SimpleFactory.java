@@ -13,6 +13,7 @@ import com.batmobi.upload.UploadImpl;
 import com.batmobi.zip.IZip;
 import com.batmobi.zip.ZipImpl;
 
+
 /**
  * description: 简单工厂
  * author: kyXiao
@@ -39,7 +40,7 @@ class SimpleFactory {
     }
 
     static IRestore createRestoreObj(String restoreWay) {
-        IRestore restoreObj = null;
+      IRestore restoreObj = null;
 
         switch (restoreWay) {
             case BackupConstant.TAI_BACKUP:

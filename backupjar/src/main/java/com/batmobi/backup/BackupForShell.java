@@ -2,12 +2,12 @@ package com.batmobi.backup;
 
 import android.text.TextUtils;
 
+
 import com.batmobi.BackupConstant;
 import com.batmobi.IResponListener;
 import com.batmobi.util.CommandUtil;
 import com.batmobi.util.LogUtil;
 import com.batmobi.util.ThreadUtil;
-import com.stericson.RootTools.RootTools;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -141,9 +141,9 @@ public class BackupForShell implements IBackup {
                         CommandUtil.sendCommand(command, new CommandUtil.OnResponListener() {
                             @Override
                             public void onSuccess(List<String> responList) {
-                                LogUtil.out(TAG, "onSuccess : 备份成功");
+                                LogUtil.out(TAG, "onAllDownloadSuccess : 备份成功");
                                 for (int i = 0; i < responList.size(); i++) {
-                                    LogUtil.out(TAG, "onSuccess : " + responList.get(i));
+                                    LogUtil.out(TAG, "onAllDownloadSuccess : " + responList.get(i));
                                 }
                                 mBackupCounted++;
                             }
@@ -188,6 +188,7 @@ public class BackupForShell implements IBackup {
             mOnResponListener = new EmptyResponListener();
         return mOnResponListener;
     }
+
 
 
 

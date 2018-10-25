@@ -1,6 +1,8 @@
 package com.batmobi;
 
 import android.content.Context;
+import android.hardware.input.InputManager;
+import android.widget.ImageView;
 
 import java.util.List;
 

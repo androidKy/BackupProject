@@ -2,7 +2,6 @@ package com.batmobi;
 
 import android.content.Context;
 
-
 import com.batmobi.backup.IBackup;
 import com.batmobi.download.IDownload;
 import com.batmobi.restore.IRestore;
@@ -296,7 +295,7 @@ public class BackupManageImpl implements IManager {
             @Override
             public void onDownloadSuccess(String fileName) {
                 mZipFileName = fileName;
-                LogUtil.out(TAG, "onDownloadSuccess fileName : " + fileName);
+                LogUtil.out(TAG, "onAllDownloadSuccess fileName : " + fileName);
                 unZip();
             }
 

@@ -1,11 +1,10 @@
 package com.batmobi.download;
 
-import android.text.TextUtils;
+
 
 import com.batmobi.BackupConstant;
 import com.batmobi.util.FTPManager;
 import com.batmobi.util.ThreadUtil;
-import com.batmobi.util.ZipUtils;
 
 import org.apache.commons.net.ftp.FTPFile;
 
